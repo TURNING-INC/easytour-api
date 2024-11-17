@@ -77,7 +77,7 @@ class UsersService extends BaseController
             'uid' => $user->id,
             'openid' => $res['openid'],
             'ext' => strtotime('+90 day'),
-        ], env('wxmp.jwt_key'), 'HS512');
+        ], env('front.jwt_key'), 'HS512');
 
         $user->save(['token' => $res['token']]);
 
