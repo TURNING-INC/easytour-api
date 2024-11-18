@@ -90,7 +90,7 @@ Route::group('', function () {
 //后台
 Route::group('backend', function () {
     //登录
-    Route::get('admin/login', 'backend.AdminController/login');
+    Route::post('admin/login', 'backend.AdminController/login');
 
     //商家信息
     Route::group('', function () {
