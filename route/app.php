@@ -133,5 +133,11 @@ Route::group('backend', function () {
             Route::get('replyList', 'backend.FeedController/replyList');
         });
 
-    })->middleware(app\middleware\ManageAdminLogin::class);
+    })->middleware(app\middleware\ManageAdminLogin::class)
+        ->allowCrossDomain([
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Credentials' => 'true',
+        'Access-Control-Allow-Methods' => 'GET,POST,OPTIONS,PUT',
+        'Access-Control-Allow-Headers' => '*',
+    ]);;
 });
