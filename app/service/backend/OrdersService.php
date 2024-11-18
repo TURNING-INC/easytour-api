@@ -127,7 +127,7 @@ class OrdersService extends BaseController
 
         $skuName = array_column($skuList, 'name', 'id');
         $spuName = array_column($spuList, 'name', 'id');
-        $spuCover = array_column($spuList, 'cover_url', 'id');
+        $spuCover = array_column($spuList, 'cover', 'id');
 
         $list = []; //spu_id => spu_detail + order_items
 
@@ -138,7 +138,7 @@ class OrdersService extends BaseController
             if(!isset($list[$spuId])) {
                 $list[$spuId] = [
                     'name' => $spuName[$spuId],
-                    'cover_url' => $spuCover[$spuId],
+                    'cover' => $spuCover[$spuId],
                     'sku_list' => [
                         [
                             'name' => $skuName[$skuId],
