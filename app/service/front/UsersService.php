@@ -59,7 +59,7 @@ class UsersService extends BaseController
     public function login($code, $mp, $merchantId)
     {
         $res = $this->decodeCode($code, $mp);
-        $user = $this->getByOpenid($code, $mp);
+        $user = $this->getByOpenid($res['openid'], $mp);
 
         if (!$user) {
             //注册
