@@ -120,7 +120,7 @@ class OrdersService extends BaseController
         $orderItems = $orderItems->toArray();
 
         $skuList = $this->sku->field("id, `{$languageKey}_name` as name")->where([['id', 'in', array_column($orderItems, 'sku_id')]])->select();
-        $spuList = $this->spu->field("id, `{$languageKey}_name` as name, cover_url")->where([['id', 'in', array_column($orderItems, 'spu_id')]])->select();
+        $spuList = $this->spu->field("id, `{$languageKey}_name` as name, cover")->where([['id', 'in', array_column($orderItems, 'spu_id')]])->select();
 
         $skuList = $skuList->toArray();
         $spuList = $spuList->toArray();
