@@ -8,6 +8,7 @@ use app\lib\Wx\Utils;
 use app\model\Favorites;
 use app\service\front\FavoritesService;
 use app\service\front\FeedsService;
+use app\service\front\FileService;
 use app\service\front\ProductsService;
 use app\service\front\UsersService;
 use think\App;
@@ -61,7 +62,7 @@ class UserController extends BaseController
             HttpEx('', 50015);
         }
 
-        $phoneInfo = '12345678'; //$this->wxUtils->getWxPhoneInfo($code); todo
+        $phoneInfo = $this->wxUtils->getWxPhoneInfo($code);
 
         return ApiResponse::returnRes([
             'phone_number' => $phoneInfo['phoneNumber'],

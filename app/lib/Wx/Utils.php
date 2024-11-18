@@ -3,6 +3,7 @@
 namespace app\lib\Wx;
 
 use app\lib\Tools;
+use app\Request;
 use think\App;
 use think\facade\Log;
 
@@ -13,8 +14,8 @@ class Utils
 
     public function __construct()
     {
-        $this->appid = env('wxmp.appid');
-        $this->secret = env('wxmp.secret');
+        $this->appid = app(Request::class)->merchant;
+        $this->secret = app(Request::class)->merchant;
     }
 
     /**
@@ -25,7 +26,7 @@ class Utils
     public function getOpenid($code)
     {
         try {
-            $res = FaTools::curlRequest('https://api.weixin.qq.com/sns/jscode2session?appid=' . $this->appid . '&secret=' . $this->secret . '&js_code=' . $code . '&grant_type=authorization_code');
+            $res = Tools::curlRequest('https://api.weixin.qq.com/sns/jscode2session?appid=' . $this->appid . '&secret=' . $this->secret . '&js_code=' . $code . '&grant_type=authorization_code');
         } catch (\Exception $e) {
             Log::error('登录凭证校验失败：' . $e->getMessage());
             HttpEx('', 50007);

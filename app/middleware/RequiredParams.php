@@ -29,7 +29,7 @@ class RequiredParams
         }
 
         try {
-            $merchant = app(\app\model\Merchants::class)->getByEncodeId($merchantId, $languageKey);
+            $merchant = app(\app\model\Merchants::class)->getByEncodeId($merchantId, $languageKey, true);
 
             if (!$merchant) {
                 HttpEx('', 50011);

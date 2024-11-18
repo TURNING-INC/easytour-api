@@ -11,8 +11,20 @@ class MerchantController extends BaseController
 {
     public function info() {
         $merchant = $this->request->merchant;
-        unset($merchant['id']);
-        unset($merchant['encode_id']);
+
+        $merchant = [
+            'name' => $merchant['name'],
+            'logo' => $merchant['logo'],
+            'banner' => json_decode($merchant['banner'], true) ?? [],
+            'address' => $merchant['address'],
+            'phone' => $merchant['phone'],
+            'lat' => $merchant['lat'],
+            'lng' => $merchant['lng'],
+            'business_hours' => json_decode($merchant['business_hours'], true) ?? [],
+            'intro' => $merchant['intro'],
+            'currency' => $merchant['currency']
+
+        ];
 
        return ApiResponse::returnRes($merchant);
     }

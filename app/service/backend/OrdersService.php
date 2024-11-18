@@ -3,6 +3,7 @@
 namespace app\service\backend;
 
 use app\BaseController;
+use app\lib\Wx\PayUtils;
 use app\model\OperateLog;
 use app\model\OrderItems;
 use app\model\Orders;
@@ -190,8 +191,37 @@ class OrdersService extends BaseController
         }
     }
 
-    public function refund($id) {
+    public function refund($orderId, $reason, $adminId) {
+        $order = $this->orders->find($orderId);
+        $orderNo = $order->order_no;
+        $transactionId = $order->transaction_id;
+        $refundNo = "refund" . date('YmdHis').substr(md5($transactionId.mt_rand()), 0, 6);
+        $payAmount = $order->pay_amount;
 
+        $weChatPayUtils = app(PayUtils::class);
+        $refundApply = $weChatPayUtils->refund($transactionId, $orderNo, $refundNo, $payAmount * 100, $payAmount * 100, $reason);
+
+        if($refundApply['return_code'] == 'SUCCESS' && $refundApply['result_code'] == 'SUCCESS') {
+            //SUCCESS退款申请接收成功，结果通过退款查询接口查询,退款有一定延时，用零钱支付的退款20分钟内到账，银行卡支付的退款3个工作日后重新查询退款状态。
+            if (isset($refundApply['err_code'])) {
+                HttpEx("退款申请提交失败：（{$refundApply['err_code']}）{$refundApply['err_code_des']}}");
+            }
+
+            $data = [
+                'status' => Orders::STATUS_CANCELLED,
+                'pay_status' => Orders::PAY_STATUS_REFUNDING,
+                'refund_no' => $refundNo
+            ];
+            $order->save($data);
+
+            $this->operateLog->log($adminId, OperateLog::FROM_BACKEND,'refund', $orderId,
+                        OperateLog::TARGET_TYPE_ORDER, json_encode($data));
+
+        } else {	//FAIL 提交业务失败
+            HttpEx("退款申请提交失败：{$refundApply['return_msg']}");
+        }
+
+        return true;
     }
 
     public function salesVolume($spuId, $start='', $end='') {

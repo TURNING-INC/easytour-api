@@ -41,6 +41,12 @@ Route::group('', function () {
         Route::get('categoryList', 'front.ProductController/categoryList');
     });
 
+    //order
+    Route::group('o', function () {
+        Route::post('payCallback', 'front.OrderController/payCallback');
+        Route::post('refundCallback', 'front.OrderController/refundCallback');
+    });
+
 
     //--------需要登录--------
     Route::group('', function () {
@@ -133,11 +139,5 @@ Route::group('backend', function () {
             Route::get('replyList', 'backend.FeedController/replyList');
         });
 
-    })->middleware(app\middleware\ManageAdminLogin::class)
-        ->allowCrossDomain([
-        'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Credentials' => 'true',
-        'Access-Control-Allow-Methods' => 'GET,POST,OPTIONS,PUT',
-        'Access-Control-Allow-Headers' => '*',
-    ]);;
+    })->middleware(app\middleware\ManageAdminLogin::class);
 });

@@ -81,31 +81,37 @@ class OrdersService extends BaseController
 
             $orderNo = date('YmdHis').substr('0123456789'.mt_rand(), 0, 3);
             $orderNo = substr($orderNo, 1); //不要第一位，剩余16位
-            $orderId = $this->orders->insertGetId([
-                'order_no' => $orderNo,
-                'merchant_id' => $merchantId,
-                'uid' => $uid,
-                'pay_' => $totalPrice,
-                'order_from' => $mp
-            ]);
-            $add = ['order_id' => $orderId];
 
-            array_walk($itemList,function(&$value,$k,$add){
-                $value = array_merge($value, $add);
-            }, $add);
+            $body = implode(',', $payBody);
 
-            $this->orderItems->saveAll($itemList);
+            $res = $this->callPay($mp, $body, $totalPrice, $orderNo);
+
+            if ($res['return_code'] == 'SUCCESS' && $res['return_msg'] == 'OK' && $res['result_code'] == 'SUCCESS') {
+                $orderId = $this->orders->insertGetId([
+                    'order_no' => $orderNo,
+                    'merchant_id' => $merchantId,
+                    'uid' => $uid,
+                    'pay_amount' => $totalPrice,
+                    'order_from' => $mp
+                ]);
+                $add = ['order_id' => $orderId];
+
+                array_walk($itemList,function(&$value,$k,$add){
+                    $value = array_merge($value, $add);
+                }, $add);
+
+                $this->orderItems->saveAll($itemList);
+            } else {
+                HttpEx($res['err_code_des']);
+            }
+
             Db::commit();
         } catch (\Exception $e) {
             Db::rollback();
             // 处理错误，例如记录日志或者返回错误信息
 
-            HttpEx('下单失败');
+            HttpEx($e->getMessage());
         }
-
-        $body = implode(',', $payBody);
-
-        $res = $this->callPay($mp, $body, $totalPrice, $orderNo);
 
         return $res;
     }
@@ -215,7 +221,7 @@ class OrdersService extends BaseController
 
         switch ($mp) {
             case Users::MP_WX:
-                $wxPay = app(PayUtils::class);
+                $wxPay = app(\app\lib\Wx\PayUtils::class);
                 $res = $wxPay->pay($totalFee, $body, $outTradeNo);
                 $res = $wxPay->formatRes($res);
                 break;
@@ -243,7 +249,7 @@ class OrdersService extends BaseController
 
     public function writeOff($orderId, $staffUid) {
         $order = $this->orders->find($orderId);
-        //todo 校验下时间
+
         if ($order->use_status == Orders::USE_STATUS_USED) {
             return true;
         }
@@ -260,4 +266,24 @@ class OrdersService extends BaseController
 
         return true;
     }
+
+    public function calcOrderValidTime($orderId) {
+        $orderItem = $this->orderItems->find($orderId);
+        $spuId = $orderItem['spu_id'];
+        $spu = $this->spu->find($spuId);
+        $validFrom = '';
+        $validEnd = '';
+
+        if ($spu['valid_period']) {
+            $validPeriod = json_decode($spu['valid_period'], true);
+            list($validFrom, $validEnd) = $validPeriod;
+        } else {
+            $validDays = $spu['valid_days'];
+            $validFrom = date('Y-m-d H:i:s');
+            $validEnd = date("Y-m-d H:i:s",strtotime("{$validDays} day"));var_dump("{$validDays} day");
+        }
+
+        return ['validFrom' => $validFrom, 'validEnd' => $validEnd];
+    }
+
 }

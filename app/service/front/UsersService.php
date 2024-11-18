@@ -44,14 +44,14 @@ class UsersService extends BaseController
     }
 
     public function decodeCode($code, $mp) {
-        $openid = ['openid' => $code .'jhwjrhwkjrhwjerk'];
+        $openid = ['openid' => ''];
 
-        //todo
-//        switch ($mp) {
-//            case Users::MP_WX:
-//                $openid = $this->wxUtils->getOpenid($code);
-//                break;
-//        }
+
+        switch ($mp) {
+            case Users::MP_WX:
+                $openid = $this->wxUtils->getOpenid($code);
+                break;
+        }
 
         return $openid;
     }

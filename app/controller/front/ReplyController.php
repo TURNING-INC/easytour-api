@@ -97,6 +97,10 @@ class ReplyController extends BaseController
 
         $reply = $this->repliesService->getById($id);
 
+        if (!$reply) {
+            HttpEx('', 50014);
+        }
+
         if ($uid != $reply['uid']) {
             HttpEx('', 50016);
         }

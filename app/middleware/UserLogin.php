@@ -24,8 +24,8 @@ class UserLogin
 
         //校验token
         try {
-            //$jwtData = (array)JWT::decode($token, env('front.jwt_key'), ['HS512']);
-$jwtData['uid'] = 1;
+            $jwtData = (array)JWT::decode($token, env('front.jwt_key'), ['HS512']);
+
             if (!$jwtData['uid']) {
                 throw new \Exception('Err token');
             }
@@ -45,7 +45,7 @@ $jwtData['uid'] = 1;
             $request->user = $user;
         } catch (\Exception $e) {
             if ($e->getMessage() == 'Expired token') {
-                HttpEx('', 50014);
+                HttpEx('', 50009);
             }
 
             HttpEx('', 50008);

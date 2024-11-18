@@ -70,6 +70,7 @@ class OrderController extends BaseController
         }
 
         $order = $order->toArray();
+        $order['can_use'] = $this->ordersService->canUse($order);
         $order['user'] = $this->usersService->getById($order['uid'], 'avatar_url, username, phone');
         $order = array_merge($order, $this->ordersService->formatOrderItems($orderId, 'zh_cn'));
 
@@ -87,7 +88,7 @@ class OrderController extends BaseController
 
         $order = $this->ordersService->getById($orderId);
 
-        if (!$orderId || $order->merchant_id != $merchantId) {
+        if (!$order || $order->merchant_id != $merchantId) {
             HttpEx('订单不存在');
         }
 
@@ -96,7 +97,7 @@ class OrderController extends BaseController
         }
 
         if (!$this->ordersService->canUse($order)) {
-            HttpEx('订单无法核销');
+            HttpEx('订单无法核销，请检查订单状态、可使用时间段');
         }
 
         $this->ordersService->writeOff($orderId, $adminId);
@@ -129,13 +130,30 @@ class OrderController extends BaseController
         $this->ordersService->changeStatus($orderId, $adminId, $status, $payStatus);
 
         return ApiResponse::returnRes(true);
-
     }
 
     public function refund(Request $request) {
+        $adminId = $request->admin->id;
         $merchantId = $request->admin->merchant_id;
         $orderId = $this->request->param('order_id', 0);
+        $reason = $this->request->param('reason', '');
 
-        $this->ordersService->refund($orderId);
+        $order = $this->ordersService->getById($orderId);
+
+        if (!$orderId || $order->merchant_id != $merchantId) {
+            HttpEx('订单不存在');
+        }
+
+        if ($order->pay_status == Orders::PAY_STATUS_REFUNDING){
+            HttpEx('订单正在退款');
+        }
+
+        if ($order->pay_status == Orders::PAY_STATUS_REFUNDED){
+            HttpEx('订单已退款');
+        }
+
+        $this->ordersService->refund($orderId, $reason, $adminId);
+
+        return ApiResponse::returnRes(true);
     }
 }

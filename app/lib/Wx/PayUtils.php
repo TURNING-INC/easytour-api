@@ -1,21 +1,36 @@
 <?php
 
-namespace app\lib;
+namespace app\lib\Wx;
+
+use app\lib\Tools;
+use think\Request;
 
 class PayUtils
 {
-    //todo 根据merchant表
-    private $mchId = '1696032179';
-    private $key = 'JdWCxiEQgRu8824hyxUTDvPy9BsGhnzs';
-    private $appId = 'wxf1c3ef6d9318c072';
-    private $payNotifyUrl = 'http://api.easytour.cn/order/payCallback';
+    private $mchId = '';
+    private $key = '';
+    private $appId = '';
+    private $openid = '';
+
+    private $payNotifyUrl = 'http://etapi.carben.me /o/payCallback';
+    private $refundNotifyUrl = 'http://etapi.carben.me /o/refundCallback';
+
+    public function __construct()
+    {
+        $this->appId = app(Request::class)->merchant->wx_app_id;
+        $this->mchId = app(Request::class)->merchant->wx_mch_id;
+        $this->key = app(Request::class)->merchant->wx_mch_key;
+        $this->openid = app(Request::class)->user->wx_openid ?? '';
+    }
 
     public function pay($totalFee, $body, $ourTradeNo, $tradeType = 'JSAPI') {
+
         $totalFee = $totalFee * 100; //分
         $url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
         $params = [
             'appid' => $this->appId,
             'mch_id' => $this->mchId,
+            'openid' => $this->openid,
             'nonce_str' => md5(mt_rand()),
             'out_trade_no' => $ourTradeNo,
             'total_fee' => $totalFee,
@@ -27,6 +42,43 @@ class PayUtils
         $xml = $this->toXml($params);
         $res = Tools::curlRequest($url, [], [], $xml, [], false);
         $res = $this->fromXml($res);
+
+        return $res;
+    }
+
+    /**
+     * 申请退款
+     * @param  string $transactionId     微信支付订单号
+     * @param  string $outTradeNo 商户订单号
+     * @param  string $totalFee 订单金额
+     * @param  string $refundFee 退款金额
+     * @param  string $refundDesc 退款原因 若订单退款金额≤1元，且属于部分退款，则不会在退款消息中体现退款原因
+     * @param  string $notifyUrl   回调地址
+     * @param  string $attach   附加数据(附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用。)
+     * @return array  $res      下单结果
+     */
+    public function refund($transactionId, $outTradeNo, $outRefundNo, $totalFee, $refundFee, $refundDesc) {
+        $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
+
+        $data['appid'] = $this->appId;
+        $data['mch_id'] = $this->mchId;
+        $data['nonce_str'] = md5(mt_rand());
+        $data['transaction_id'] = $transactionId;
+        $data['out_trade_no'] = $outTradeNo;
+        $data['out_refund_no'] = $outRefundNo;
+        $data['total_fee'] = $totalFee;
+        $data['refund_fee'] = $refundFee;
+        $data['refund_desc'] = $refundDesc;
+        $data['notify_url'] = $this->refundNotifyUrl;
+        $data['sign'] = $this->makeSign($data);
+
+        // xml格式化、发送
+        $data2 = $this->toXml($data);
+        $res = Tools::curlRequest($url, [], [], $data2, [], false);
+
+        // 反xml
+        $res = $this->fromXml($res);
+        $res = array_merge($res, $data);
 
         return $res;
     }
@@ -48,7 +100,7 @@ class PayUtils
     }
 
     public function checkSign($params)
-    {return true;
+    {
         if ($params['sign']) {
             $sign = $params['sign'];
             unset($params['sign']);
@@ -176,8 +228,26 @@ class PayUtils
         $res['paySign'] = $this->makeSign($res);
         $res['return_code'] = $data['return_code'];
         $res['return_msg'] = $data['return_msg'];
+        $res['result_code'] = $data['result_code'];
 
+        if (isset($data['err_code_des'])) {
+            $res['err_code_des'] = $data['err_code_des'];
+        }
 
         return $res;
+    }
+
+    /**
+     * 对退款结果通知中的req_info进行解密
+     * 1）对加密串A做base64解码，得到加密串B
+     * 2）对商户key做md5，得到32位小写key* ( key设置路径：微信商户平台(pay.weixin.qq.com)-->账户设置-->API安全-->密钥设置 )
+     * 3）用key*对加密串B做AES-256-ECB解密（PKCS7Padding）
+     */
+    public function decodeReqInfo($reqInfo) {
+        $decodeReqInfo = base64_decode($reqInfo);
+        $key = md5($this->key);
+        $reqInfo = openssl_decrypt($decodeReqInfo , 'aes-256-ecb', $key, OPENSSL_RAW_DATA);
+
+        return $this->fromXml($reqInfo);
     }
 }
