@@ -138,7 +138,7 @@ class OrdersService extends BaseController
             if(!isset($list[$spuId])) {
                 $list[$spuId] = [
                     'name' => $spuName[$spuId],
-                    'cover' => $spuCover[$spuId],
+                    'cover' => json_decode($spuCover[$spuId]) ?? [],
                     'sku_list' => [
                         [
                             'name' => $skuName[$skuId],
