@@ -18,16 +18,16 @@ class PayUtils
 
     public function __construct()
     {
-        $merchantId = app(Request::class)->merchant_id;
+        $merchantId = app(Request::class)->merchant->id ?? app(Request::class)->admin->merchant_id;
         $merchant = app(Merchants::class)->find($merchantId);
+
+        if (!$merchant->wx_app_id || !$merchant->wx_mch_id || !$merchant->wx_mch_key) {
+            HttpEx('未配置mch信息');
+        }
 
         $this->appId = $merchant->wx_app_id;
         $this->mchId = $merchant->merchant->wx_mch_id;
-        $this->key = $merchant->merchant->wx_mch_key;
-
-        if (!$this->appId || $this->mchId || $this->key) {
-            HttpEx('未配置mch信息');
-        }
+        $this->key = $merchant->wx_mch_key;
 
         $this->openid = $merchant->user->wx_openid ?? '';
     }

@@ -4,7 +4,8 @@ namespace app\lib\Wx;
 
 use app\lib\Tools;
 use app\model\AccessToken;
-use app\Request;
+use app\model\Merchants;
+use think\Request;
 use think\App;
 use think\facade\Log;
 
@@ -16,8 +17,16 @@ class Utils
 
     public function __construct()
     {
-        $this->appid = app(Request::class)->merchant->wx_app_id;
-        $this->secret = app(Request::class)->merchant->wx_app_secret;
+        $merchantId = app(Request::class)->merchant->id ?? app(Request::class)->admin->merchant_id;
+        $merchant = app(Merchants::class)->find($merchantId);
+
+        if (!$merchant->wx_app_id || !$merchant->wx_app_secret) {
+            HttpEx('未配置mch信息.');
+        }
+
+        $this->appid = $merchant->wx_app_id;
+        $this->secret = $merchant->wx_app_secret;
+
         $this->accessToken = app(AccessToken::class);
     }
 

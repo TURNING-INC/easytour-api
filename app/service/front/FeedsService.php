@@ -45,7 +45,7 @@ class FeedsService extends BaseController
         return $this->feeds
             ->alias('f')
             ->leftJoin('users u', 'u.id = f.uid')
-            ->field("f.id, f.cover_url, f.`{$languageKey}_title` as title, f.like_count, f.reply_count, f.del_flag, u.username as author")
+            ->field("f.id, f.cover, f.`{$languageKey}_title` as title, f.like_count, f.reply_count, f.del_flag, u.username as author")
             ->where($where)
             ->group("f.id")
             ->order("f.weight desc, f.id desc")

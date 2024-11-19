@@ -111,18 +111,20 @@ class UserController extends BaseController
 
         foreach ($list as &$item) {
             if ($item['target_type'] == Favorites::TYPE_FEED) {
-                $field = "id, `{$languageKey}_title` as title, type, cover_url";
+                $field = "id, `{$languageKey}_title` as title, type, cover";
                 $feed = $this->feedsService->getById($item['target_id'], $field);
-                $feed->content = '';
-                $content = $this->feedsService->getContent($item['target_id'], "`{$languageKey}_content` as content");
-                $content = json_decode($content['content'], true);
+                $feed->cover = json_decode($feed->cover) ?? [];
 
-                foreach ($content as $data) {
-                    if (isset($data['type']) && $data['type'] == 'text') {
-                        $feed->content = $data['value'];
-                        break;
-                    }
-                }
+//                $feed->content = '';
+//                $content = $this->feedsService->getContent($item['target_id'], "`{$languageKey}_content` as content");
+//                $feed->content = $content['content'];
+                //json_decode($content['content'], true);
+//                foreach ($content as $data) {
+//                    if (isset($data['type']) && $data['type'] == 'text') {
+//                        $feed->content = $data['value'];
+//                        break;
+//                    }
+//                }
                 $item->feed = $feed;
             } else { //product
                 $field = "id, `{$languageKey}_name` as name, type, cover";

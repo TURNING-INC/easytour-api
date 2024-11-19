@@ -38,6 +38,10 @@ class FeedController extends BaseController
 
         $list = $this->feedsService->list($merchantId, $type, $keyword, $username, $delFlag, $page, $count);
 
+        foreach ($list->items() as &$item) {
+            $item->cover = json_decode($item->cover) ?? [];
+        }
+
         return ApiResponse::returnRes(['total' => $list->total(), 'list' => $list->items()]);
     }
 
@@ -60,7 +64,7 @@ class FeedController extends BaseController
     public function save(Request $request) {
         $merchantId = $request->admin->merchant_id;
         $feedId = $this->request->param('feed_id', 0);
-        $coverUrl = $this->request->param('cover_url', '');
+        $cover = $this->request->param('cover', '');
         $zhCnTitle = $this->request->param('zh_cn_title', '');
         $zhHkTitle = $this->request->param('zh_hk_title', '');
         $enTitle = $this->request->param('en_title', '');
@@ -87,9 +91,15 @@ class FeedController extends BaseController
             $feedId ? HttpEx('无权修改') : HttpEx('该用户非员工');
         }
 
-        $zhCnContent = array_filter(json_decode($zhCnContent, true) ?? []);
-        $zhHkContent = array_filter(json_decode($zhHkContent, true) ?? []);
-        $enContent = array_filter(json_decode($enContent, true) ?? []);
+//        $zhCnContent = array_filter(json_decode($zhCnContent, true) ?? []);
+//        $zhHkContent = array_filter(json_decode($zhHkContent, true) ?? []);
+//        $enContent = array_filter(json_decode($enContent, true) ?? []);
+
+        $cover = array_filter(json_decode($cover, true) ?? []);
+
+        if (!$cover) {
+            HttpEx('封面缺失');
+        }
 
         if (!$zhCnTitle || !$zhHkTitle || !$enTitle) {
             HttpEx('标题缺失不完整');
@@ -101,7 +111,7 @@ class FeedController extends BaseController
 
         $res = $this->feedsService->saveFeed($feedId, [
             'merchant_id' => $merchantId,
-            'cover_url' => $coverUrl,
+            'cover' => json_encode($cover),
             'zh_cn_title' => $zhCnTitle,
             'zh_hk_title' => $zhHkTitle,
             'en_title' => $enTitle,
@@ -115,9 +125,9 @@ class FeedController extends BaseController
 
         $this->feedsService->saveFeedContent($feedId, [
             'feed_id' => $feedId,
-            'zh_cn_content' => json_encode($zhCnContent, JSON_UNESCAPED_UNICODE),
-            'zh_hk_content' => json_encode($zhHkContent, JSON_UNESCAPED_UNICODE),
-            'en_content' => json_encode($enContent),
+            'zh_cn_content' => $zhCnContent , //json_encode($zhCnContent, JSON_UNESCAPED_UNICODE),
+            'zh_hk_content' => $zhHkContent, //json_encode($zhHkContent, JSON_UNESCAPED_UNICODE),
+            'en_content' => $enContent, //json_encode($enContent),
         ]);
 
         return ApiResponse::returnRes(true);

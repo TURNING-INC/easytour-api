@@ -46,6 +46,10 @@ class FeedController extends BaseController
 
         $list = $this->feedsService->list($merchantId, $type, $languageKey, $page, $count);
 
+        foreach ($list->items() as &$item) {
+            $item->cover = json_decode($item->cover) ?? [];
+        }
+
         return ApiResponse::returnRes($list->items());
     }
 
@@ -56,13 +60,15 @@ class FeedController extends BaseController
 
         if (!$feedId) HttpEx('', 50013);
 
-        $feed = $this->feedsService->getById($feedId, "id, cover_url, merchant_id, uid, `{$languageKey}_title` as title, like_count, reply_count, created_at");
+        $feed = $this->feedsService->getById($feedId, "id, cover, merchant_id, uid, `{$languageKey}_title` as title, like_count, reply_count, created_at");
 
         if (!$feed || $feed['merchant_id'] != $merchantId) {
             HttpEx('', 50014);
         }
 
         unset($feed['merchant_id']);
+
+        $feed['cover'] = json_decode($feed['cover']) ?? [];
         $content = $this->feedsService->getContent($feedId, "{$languageKey}_content as content");
         $feed['content'] = $content ? json_decode($content["content"], true) : [];
 

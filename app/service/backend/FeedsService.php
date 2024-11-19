@@ -54,7 +54,7 @@ class FeedsService extends BaseController
         return $this->feeds
             ->alias('f')
             ->leftJoin('users u', 'u.id = f.uid')
-            ->field("f.id, f.cover_url, f.`zh_cn_title` as title, f.like_count, f.reply_count, f.del_flag, u.username as author_name")
+            ->field("f.id, f.cover, f.`zh_cn_title` as title, f.like_count, f.reply_count, f.del_flag, u.username as author_name")
             ->where($where)
             ->group("f.id")
             ->order("f.weight desc, f.id desc")
@@ -71,17 +71,18 @@ class FeedsService extends BaseController
         if (!$detail) {
             return [];
         }
+        $detail['cover'] = json_decode($detail['cover']) ?? [];
 
         $content = $this->feedContent
                     ->where(['feed_id' => $feedId])
                     ->field('zh_cn_content, zh_hk_content, en_content')
                     ->find();
 
-        if ($content) {
-            $content['zh_cn_content'] = json_decode($content['zh_cn_content']);
-            $content['zh_hk_content'] = json_decode($content['zh_hk_content']);
-            $content['en_content'] = json_decode($content['en_content']);
-        }
+//        if ($content) {
+//            $content['zh_cn_content'] = json_decode($content['zh_cn_content']);
+//            $content['zh_hk_content'] = json_decode($content['zh_hk_content']);
+//            $content['en_content'] = json_decode($content['en_content']);
+//        }
         $detail['content'] = $content;
 
         $user = $this->users->field('id, username')->find($detail['uid']);

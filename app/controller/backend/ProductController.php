@@ -69,7 +69,7 @@ class ProductController extends BaseController
             HttpEx('数据错误');
         }
 
-        $coverUrl = $this->request->param('cover_url', '');
+        $cover = $this->request->param('cover', '');
         $zhCnName = $this->request->param('zh_cn_name', '');
         $zhHkName = $this->request->param('zh_hk_name', '');
         $enName = $this->request->param('en_name', '');
@@ -102,7 +102,7 @@ class ProductController extends BaseController
 
         $data = [
             'merchant_id' => $merchantId,
-            'cover_url' => $coverUrl,
+            'cover' => $cover,
             'type' => $type,
             'can_mc' => $canMc,
             'zh_cn_name' => $zhCnName,
