@@ -3,6 +3,7 @@
 namespace app\lib\Wx;
 
 use app\lib\Tools;
+use app\model\AccessToken;
 use app\Request;
 use think\App;
 use think\facade\Log;
@@ -11,11 +12,13 @@ class Utils
 {
     private $appid;
     private $secret;
+    private $accessToken;
 
     public function __construct()
     {
-        $this->appid = app(Request::class)->merchant;
-        $this->secret = app(Request::class)->merchant;
+        $this->appid = app(Request::class)->merchant->wx_app_id;
+        $this->secret = app(Request::class)->merchant->wx_app_secret;
+        $this->accessToken = app(AccessToken::class);
     }
 
     /**
@@ -74,5 +77,51 @@ class Utils
         }
 
         return $res['phone_info'];
+    }
+
+    public function getAccessToken()
+    {
+        $accessToken = $this->accessToken->getByAppid($this->appid);
+
+        if (!$accessToken || !$accessToken->access_token || !$accessToken->expires_time || $accessToken->expires_time < time()) {
+            $accessToken = $this->getNewAccessToken();
+        }
+
+        return $accessToken['access_token'];
+    }
+
+    public function getNewAccessToken()
+    {
+        $accessToken = $this->accessToken->getByAppid($this->appid);
+
+        try {
+            $res = Tools::curlRequest('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' . $this->appid . '&secret=' . $this->secret);
+
+        } catch (\Exception $e) {
+            Log::error('获取access_token失败：' . $e->getMessage());
+            HttpEx('获取access_token失败');
+        }
+
+        if (isset($res['errcode']) && $res['errcode']) {
+            Log::warning('获取access_token失败：' . $res['errcode'] . ' => ' . $res['errmsg']);
+            HttpEx($res['errcode'] . ' => ' . $res['errmsg']);
+        }
+
+        $expiresTime = time() + $res['expires_in'] - 1000;
+
+        if (!$accessToken) {
+            $this->accessToken->insert([
+                'appid' => $this->appid,
+                'expires_time' => $expiresTime,
+                'access_token' => $res['access_token'],
+            ]);
+        } else {
+            $accessToken->save([
+                'expires_time' => $expiresTime,
+                'access_token' => $res['access_token'],
+            ]);
+        }
+
+        return $res;
     }
 }
