@@ -3,6 +3,7 @@
 namespace app\lib\Wx;
 
 use app\lib\Tools;
+use app\model\Merchants;
 use think\Request;
 
 class PayUtils
@@ -17,10 +18,18 @@ class PayUtils
 
     public function __construct()
     {
-        $this->appId = app(Request::class)->merchant->wx_app_id;
-        $this->mchId = app(Request::class)->merchant->wx_mch_id;
-        $this->key = app(Request::class)->merchant->wx_mch_key;
-        $this->openid = app(Request::class)->user->wx_openid ?? '';
+        $merchantId = app(Request::class)->merchant_id;
+        $merchant = app(Merchants::class)->find($merchantId);
+
+        $this->appId = $merchant->wx_app_id;
+        $this->mchId = $merchant->merchant->wx_mch_id;
+        $this->key = $merchant->merchant->wx_mch_key;
+
+        if (!$this->appId || $this->mchId || $this->key) {
+            HttpEx('未配置mch信息');
+        }
+
+        $this->openid = $merchant->user->wx_openid ?? '';
     }
 
     public function pay($totalFee, $body, $ourTradeNo, $tradeType = 'JSAPI') {

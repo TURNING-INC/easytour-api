@@ -84,7 +84,9 @@ class OrdersService extends BaseController
 
             $body = implode(',', $payBody);
 
-            $res = $this->callPay($mp, $body, $totalPrice, $orderNo);
+            //$res = $this->callPay($mp, $body, $totalPrice, $orderNo);
+            //todo 没有商户可以用，先模拟
+$res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCCESS'];
 
             if ($res['return_code'] == 'SUCCESS' && $res['return_msg'] == 'OK' && $res['result_code'] == 'SUCCESS') {
                 $orderId = $this->orders->insertGetId([
