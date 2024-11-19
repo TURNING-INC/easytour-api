@@ -129,7 +129,7 @@ class ProductsService extends BaseController
             ->where([['spu_id', '=', $spuId]])
             ->find();
 
-        $spuDetail = $spuDetail->toArray();
+        $spuDetail = $spuDetail ? $spuDetail->toArray() : [];
 
         $spu = array_merge($spu, $spuDetail);
 

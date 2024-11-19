@@ -13,8 +13,8 @@ class PayUtils
     private $appId = '';
     private $openid = '';
 
-    private $payNotifyUrl = 'http://etapi.carben.me /o/payCallback';
-    private $refundNotifyUrl = 'http://etapi.carben.me /o/refundCallback';
+    private $payNotifyUrl = 'http://etapi.carben.me/o/payCallback';
+    private $refundNotifyUrl = 'http://etapi.carben.me/o/refundCallback';
 
     public function __construct()
     {

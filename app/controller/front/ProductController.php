@@ -70,10 +70,11 @@ class ProductController extends BaseController
         $detail = $this->productsService->detail($spuId, $languageKey);
 
         $detail['cover'] = json_decode($detail['cover']);
-        if ($detail["detail"]) $detail["detail"] = json_decode($detail["detail"]);
-        if ($detail["notice"]) $detail["notice"] = json_decode($detail["notice"]);
-        if ($detail["price_schedule"]) $detail["price_schedule"] = json_decode($detail["price_schedule"]);
-        if ($detail["limit"]) $detail["limit"] = json_decode($detail["limit"]);
+
+        if (isset($detail["detail"])) $detail["detail"] = json_decode($detail["detail"]);
+        if (isset($detail["notice"])) $detail["notice"] = json_decode($detail["notice"]);
+        if (isset($detail["price_schedule"])) $detail["price_schedule"] = json_decode($detail["price_schedule"]);
+        if (isset($detail["limit"])) $detail["limit"] = json_decode($detail["limit"]);
 
         if ($token = $this->request->param('token', "")) {
             $tokenRes = Tools::decodeFrontToken($token);
