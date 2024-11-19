@@ -79,7 +79,7 @@ class MerchantController extends BaseController
             'zh_cn_intro' => $zhCnIntro,
             'zh_hk_intro' => $zhHkIntro,
             'en_intro' => $enIntro,
-            'business_hour' => $businessHour,
+            'business_hours' => $businessHour,
             'lat' => $lat,
             'lng' => $lng,
             'zh_cn_address' => $zhCnAddress,
