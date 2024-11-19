@@ -65,6 +65,7 @@ class FeedController extends BaseController
         $merchantId = $request->admin->merchant_id;
         $feedId = $this->request->param('feed_id', 0);
         $cover = $this->request->param('cover', '');
+        $banner = $this->request->param('banner', '');
         $zhCnTitle = $this->request->param('zh_cn_title', '');
         $zhHkTitle = $this->request->param('zh_hk_title', '');
         $enTitle = $this->request->param('en_title', '');
@@ -112,6 +113,7 @@ class FeedController extends BaseController
         $res = $this->feedsService->saveFeed($feedId, [
             'merchant_id' => $merchantId,
             'cover' => json_encode($cover),
+            'banner' => $banner,
             'zh_cn_title' => $zhCnTitle,
             'zh_hk_title' => $zhHkTitle,
             'en_title' => $enTitle,

@@ -60,7 +60,8 @@ class FeedController extends BaseController
 
         if (!$feedId) HttpEx('', 50013);
 
-        $feed = $this->feedsService->getById($feedId, "id, cover, merchant_id, uid, `{$languageKey}_title` as title, like_count, reply_count, created_at");
+        $feed = $this->feedsService->getById($feedId, "id, cover, banner, merchant_id, uid, `{$languageKey}_title` as title, 
+                                                            like_count, reply_count, created_at");
 
         if (!$feed || $feed['merchant_id'] != $merchantId) {
             HttpEx('', 50014);
@@ -69,6 +70,8 @@ class FeedController extends BaseController
         unset($feed['merchant_id']);
 
         $feed['cover'] = json_decode($feed['cover']) ?? [];
+        $feed['banner'] = json_decode($feed['banner']) ?? [];
+        
         $content = $this->feedsService->getContent($feedId, "{$languageKey}_content as content");
         $feed['content'] = $content ? json_decode($content["content"], true) : [];
 
