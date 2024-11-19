@@ -72,6 +72,7 @@ class FeedsService extends BaseController
             return [];
         }
         $detail['cover'] = json_decode($detail['cover']) ?? [];
+        $detail['banner'] = json_decode($detail['banner']) ?? [];
 
         $content = $this->feedContent
                     ->where(['feed_id' => $feedId])
