@@ -6,7 +6,7 @@ use think\Model;
 
 class Merchants extends Model
 {
-    function getByEncodeId($encodeId, $languageKey='zh_cn', $includeAppSet) {
+    function getByEncodeId($encodeId, $languageKey='zh_cn', $includeAppSet=false) {
         $field = "id, encode_id, `{$languageKey}_name` as name, logo, banner, `{$languageKey}_address` as address, 
                     phone, lat, lng, business_hours, `{$languageKey}_intro` as intro, currency";
 

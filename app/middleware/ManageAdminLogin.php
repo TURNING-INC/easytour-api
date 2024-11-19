@@ -42,7 +42,7 @@ class ManageAdminLogin
             }
 
             $request->admin = $admin;
-        } catch (\Exception $e) {var_dump($e->getMessage());
+        } catch (\Exception $e) {
             if ($e->getMessage() == 'Expired token') {
                 HttpEx('', 50014);
             }
