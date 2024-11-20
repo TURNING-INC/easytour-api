@@ -75,6 +75,7 @@ class UserController extends BaseController
             'username' => $user['username'],
             'avatar_url' => $user['avatar_url'],
             'type' => $user['type'],
+            'phone' => $user['phone']
         ];
         return ApiResponse::returnRes($user);
     }
