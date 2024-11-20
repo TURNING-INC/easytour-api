@@ -83,8 +83,8 @@ Route::group('', function () {
         //order
         Route::group('o', function () {
             Route::post('place', 'front.OrderController/place');
-            Route::post('list', 'front.OrderController/list');
-            Route::post('detail', 'front.OrderController/detail');
+            Route::get('list', 'front.OrderController/list');
+            Route::get('detail', 'front.OrderController/detail');
             Route::post('writeOff', 'front.OrderController/writeOff');
         });
 
