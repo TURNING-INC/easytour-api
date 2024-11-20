@@ -244,10 +244,10 @@ class ProductController extends BaseController
                     'id' => $sku['sku_id'],
                     'zh_cn_name' => $sku['zh_cn_name'],
                     'zh_hk_name' => $sku['zh_hk_name'],
-                    'zh_en_name' => $sku['en_name'],
+                    'en_name' => $sku['en_name'],
                     'origin_price' => $sku['origin_price'],
-                    'discount_price' => $sku['discount_price'],
-                    'par_value' => $sku['par_value'] ?? NULL,
+                    'discount_price' => is_numeric($sku['discount_price']) ? $sku['discount_price'] : NULL,
+                    'par_value' => is_numeric($sku['par_value']) ? $sku['par_value'] : NULL,
                     'inventory' => $sku['inventory']
                 ];
             } else {
@@ -255,10 +255,10 @@ class ProductController extends BaseController
                     'spu_id' => $spuId,
                     'zh_cn_name' => $sku['zh_cn_name'],
                     'zh_hk_name' => $sku['zh_hk_name'],
-                    'zh_en_name' => $sku['en_name'],
+                    'en_name' => $sku['en_name'],
                     'origin_price' => $sku['origin_price'],
-                    'discount_price' => $sku['discount_price'],
-                    'par_value' => $sku['par_value'] ?? NULL,
+                    'discount_price' => is_numeric($sku['discount_price']) ? $sku['discount_price'] : NULL,
+                    'par_value' => is_numeric($sku['par_value']) ? $sku['par_value'] : NULL,
                     'inventory' => $sku['inventory']
                 ];
             }
