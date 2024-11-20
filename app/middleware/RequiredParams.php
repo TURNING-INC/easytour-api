@@ -14,7 +14,7 @@ class RequiredParams
      */
     public function handle(\think\Request $request, \Closure $next)
     {
-        $merchantId =  $request->header('merchant_id') ?? $request->param('merchant_id');
+        $merchantId =  $request->header('merchantid') ?? $request->param('merchant_id');
         $mp =  $request->header('mp') ?? $request->param('mp');
         $language =  $request->header('language') ?? $request->param('language');
         $language = $language ?: 'zh-cn' ;
