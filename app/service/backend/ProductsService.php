@@ -96,16 +96,16 @@ class ProductsService extends BaseController
             ->where([['spu_id', '=', $spuId]])
             ->find();
 
-        if ($spuDetail) {
-            $spuDetail = $spuDetail->toArray();
-            $languageData = $detail . ',' . $notice . ',' .$priceSchedule . ',' . $limit;
-            $languageData = explode(',', str_replace('`', '', $languageData));
-            foreach ($languageData as $data) {
-                if ($spuDetail[$data]) {
-                    $spuDetail[$data] = json_decode($spuDetail[$data]) ?? [];
-                }
-            }
-        }
+//        if ($spuDetail) {
+//            $spuDetail = $spuDetail->toArray();
+//            $languageData = $detail . ',' . $notice . ',' .$priceSchedule . ',' . $limit;
+//            $languageData = explode(',', str_replace('`', '', $languageData));
+//            foreach ($languageData as $data) {
+//                if ($spuDetail[$data]) {
+//                    $spuDetail[$data] = json_decode($spuDetail[$data]) ?? [];
+//                }
+//            }
+//        }
 
         $spu['spu_detail'] = $spuDetail;
 

@@ -155,9 +155,9 @@ class ProductController extends BaseController
         $zhHkLimit = $this->request->param('zh_hk_limit', '');
         $enLimit = $this->request->param('en_limit', '');
 
-        $zhCnDetail = array_filter(json_decode($zhCnDetail, true) ?? []);
-        $zhHkDetail = array_filter(json_decode($zhHkDetail, true) ?? []);
-        $enDetail = array_filter(json_decode($enDetail, true) ?? []);
+//        $zhCnDetail = array_filter(json_decode($zhCnDetail, true) ?? []);
+//        $zhHkDetail = array_filter(json_decode($zhHkDetail, true) ?? []);
+//        $enDetail = array_filter(json_decode($enDetail, true) ?? []);
 
         if (!$zhCnDetail || !$zhHkDetail || !$enDetail) {
             HttpEx('详情缺失不完整');
@@ -165,8 +165,8 @@ class ProductController extends BaseController
 
         $data = [
             'spu_id' => $spuId,
-            'zh_cn_detail' => json_encode($zhCnDetail, JSON_UNESCAPED_UNICODE),
-            'zh_hk_detail' => json_encode($zhHkDetail, JSON_UNESCAPED_UNICODE),
+            'zh_cn_detail' => $zhCnDetail,
+            'zh_hk_detail' => $zhHkDetail,
             'en_detail' => $enDetail,
             'zh_cn_notice' => $zhCnNotice,
             'zh_hk_notice' => $zhHkNotice,
