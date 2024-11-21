@@ -77,7 +77,7 @@ class ProductController extends BaseController
 //        if (isset($detail["limit"])) $detail["limit"] = json_decode($detail["limit"]);
 
         $detail['is_favorite'] = false;
-        if ($token = $this->request->param('token', "")) {
+        if ($token = $this->request->header('token') ?? $this->request->param('token')) {
             $tokenRes = Tools::decodeFrontToken($token);
             $uid = $tokenRes['uid'] ?? 0;
             $detail['is_favorite'] = $this->favoritesService->isFavorites($uid, $spuId, Favorites::TYPE_PRODUCT);

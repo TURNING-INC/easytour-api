@@ -49,7 +49,7 @@ class ReplyController extends BaseController
         }
 
         $uid = 0;
-        if ($token = $this->request->param('token', "")) {
+        if ($token = $this->request->header('token') ?? $this->request->param('token')) {
             $tokenRes = Tools::decodeFrontToken($token);
             $uid = $tokenRes['uid'] ?? 0;
         }

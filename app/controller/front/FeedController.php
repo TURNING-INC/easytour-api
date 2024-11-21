@@ -82,7 +82,7 @@ class FeedController extends BaseController
         //初始化是否点赞/收藏了feed
         $feed['is_like'] = false;
         $feed['is_favorite'] = false;
-        if ($token = $this->request->param('token', "")) {
+        if ($token = $this->request->header('token') ?? $this->request->param('token')) {
             $tokenRes = Tools::decodeFrontToken($token);
             $uid = $tokenRes['uid'] ?? 0;
             $feed['is_like'] = $this->likesService->isLike($uid, $feedId, Likes::TYPE_FEED);
