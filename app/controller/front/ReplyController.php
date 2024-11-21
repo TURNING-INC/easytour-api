@@ -51,7 +51,7 @@ class ReplyController extends BaseController
         $uid = 0;
         if ($token = $this->request->param('token', "")) {
             $tokenRes = Tools::decodeFrontToken($token);
-            $uid = 1;$tokenRes['uid'] ?? 0;
+            $uid = $tokenRes['uid'] ?? 0;
         }
 
         $results = $this->repliesService->list($feedId, $threadId, $uid, $page, $count);

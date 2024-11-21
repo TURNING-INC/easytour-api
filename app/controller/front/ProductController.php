@@ -76,6 +76,7 @@ class ProductController extends BaseController
 //        if (isset($detail["price_schedule"])) $detail["price_schedule"] = json_decode($detail["price_schedule"]);
 //        if (isset($detail["limit"])) $detail["limit"] = json_decode($detail["limit"]);
 
+        $detail['is_favorite'] = false;
         if ($token = $this->request->param('token', "")) {
             $tokenRes = Tools::decodeFrontToken($token);
             $uid = $tokenRes['uid'] ?? 0;

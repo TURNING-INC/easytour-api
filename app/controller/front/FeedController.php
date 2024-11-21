@@ -83,8 +83,8 @@ class FeedController extends BaseController
         $feed['is_like'] = false;
         $feed['is_favorite'] = false;
         if ($token = $this->request->param('token', "")) {
-            //$tokenRes = Tools::decodeFrontToken($token);
-            $uid = 1;//$tokenRes['uid'] ?? 0;
+            $tokenRes = Tools::decodeFrontToken($token);
+            $uid = $tokenRes['uid'] ?? 0;
             $feed['is_like'] = $this->likesService->isLike($uid, $feedId, Likes::TYPE_FEED);
             $feed['is_favorite'] = $this->favoritesService->isFavorites($uid, $feedId, Favorites::TYPE_FEED);
         }
