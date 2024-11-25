@@ -101,7 +101,7 @@ class UsersService extends BaseController
     {
 
         //可更新用户
-        $userUpdParam = ['username', 'avatar_url', 'phone_number', 'gender', 'real_name'];
+        $userUpdParam = ['username', 'avatar_url', 'phone'];
         //更新数据
         $userUpdData = [];
 
@@ -113,7 +113,7 @@ class UsersService extends BaseController
 
         //更新用户
         if ($userUpdData) {
-            $this->users->where('id', $uid)->update($userUpdData);
+            $this->users->where(['id' => $uid])->save($userUpdData);
             $res = true;
         }
 
