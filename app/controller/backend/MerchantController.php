@@ -48,13 +48,14 @@ class MerchantController extends BaseController
         $zhCnIntro = $this->request->param('zh_cn_intro', '');
         $zhHkIntro = $this->request->param('zh_hk_intro', '');
         $enIntro = $this->request->param('en_intro', '');
-        $businessHour = $this->request->param('business_hour');
+        $businessHours = $this->request->param('business_hours');
         $lat = $this->request->param('lat', '');
         $lng = $this->request->param('lng', '');
         $zhCnAddress = $this->request->param('zh_cn_address', '');
         $zhHkAddress = $this->request->param('zh_hk_address', '');
         $enAddress = $this->request->param('en_address', '');
         $phone = $this->request->param('phone', '');
+        $loginBg = $this->request->param('login_bg', '');
 
         $banner = json_decode($banner, true) ?? [];
 
@@ -79,13 +80,14 @@ class MerchantController extends BaseController
             'zh_cn_intro' => $zhCnIntro,
             'zh_hk_intro' => $zhHkIntro,
             'en_intro' => $enIntro,
-            'business_hours' => $businessHour,
+            'business_hours' => $businessHours,
             'lat' => $lat,
             'lng' => $lng,
             'zh_cn_address' => $zhCnAddress,
             'zh_hk_address' => $zhHkAddress,
             'en_address' => $enAddress,
-            'phone' => $phone
+            'phone' => $phone,
+            'login_bg' => $loginBg
         ]);
 
         return ApiResponse::returnRes(true);

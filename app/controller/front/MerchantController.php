@@ -22,7 +22,8 @@ class MerchantController extends BaseController
             'lng' => $merchant['lng'],
             'business_hours' => json_decode($merchant['business_hours'], true) ?? [],
             'intro' => $merchant['intro'],
-            'currency' => $merchant['currency']
+            'currency' => $merchant['currency'],
+            'login_bg' => $merchant['login_bg']
 
         ];
 
