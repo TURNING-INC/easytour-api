@@ -91,6 +91,10 @@ class ProductsService extends BaseController
         $spu['valid_period'] = json_decode($spu['valid_period'], true);
         $spu['sales_volume'] = $this->ordersService->salesVolume($spuId);
 
+        $categories = $this->categorySpu->where(['spu_id' => $spuId])->select();
+        $categories = $categories->toArray();
+        $spu['category_ids'] = $categories ? array_column($categories, 'category_id') : [];
+
         $spuDetail = $this->spuDetail
             ->field("{$detail}, {$notice}, {$priceSchedule}, {$limit}")
             ->where([['spu_id', '=', $spuId]])
