@@ -113,7 +113,7 @@ class ProductController extends BaseController
             'discount_start' => $discountStart,
             'discount_end' => $discountEnd,
             'valid_days' => $validDays,
-            'valid_period' => $validPeriod ? implode(',', $validPeriod) : '',
+            'valid_period' => json_encode($validPeriod),
             'del_flag' => !$spuId ? Spu::DELETED: $delFlag
         ];
 
