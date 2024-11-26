@@ -53,8 +53,10 @@ class ProductsService extends BaseController
             $where[] = "cp.category_id = {$categoryId}";
         }
 
+        $discountType = array_filter(explode('，', $discountType));
         if ($discountType) {
-            $where[] = "spu.discount_type = {$discountType}";
+            $discountType = implode(',', $discountType);
+            $where[] = "spu.discount_type IN ({$discountType}) ";
         }
 
         $where = implode(' AND ', $where);
