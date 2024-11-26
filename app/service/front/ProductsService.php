@@ -39,7 +39,7 @@ class ProductsService extends BaseController
         $this->favoritesService = $favoritesService;
     }
 
-    public function list($merchantId, $type, $categoryId, $discountType, $languageKey, $page, $count) {
+    public function list($merchantId, $type, $categoryIds, $discountType, $languageKey, $page, $count) {
         $languageName = "{$languageKey}_name";
         $field = "spu.`id` as spu_id, spu.cover, spu.`{$languageName}` as name, spu.type, spu.discount_type, spu.discount_start, spu.discount_end";
 
@@ -49,8 +49,10 @@ class ProductsService extends BaseController
         $where[] = "spu.type = {$type}";
         $where[] = "spu.del_flag = " . Spu::NORMAL;
 
-        if ($categoryId) {
-            $where[] = "cp.category_id = {$categoryId}";
+        $categoryIds = array_filter(explode('，', $categoryIds));
+        if ($categoryIds) {
+            $categoryIds = implode(',', $categoryIds);
+            $where[] = "cp.category_id IN ({$categoryIds})";
         }
 
         $discountType = array_filter(explode('，', $discountType));

@@ -32,12 +32,12 @@ class ProductController extends BaseController
         $merchantId = $this->request->merchant->id;
         $languageKey = $this->request->languageKey;
         $type = $this->request->param('type', 0);
-        $categoryId = $this->request->param('category_id', 0);
+        $categoryIds = $this->request->param('category_ids', 0);
         $discountType = $this->request->param('discount_type', 0);
         $page = $this->request->param('page', 1);
         $count = $this->request->param('count', 5);
 
-        $list = $this->productsService->list($merchantId, $type, $categoryId, $discountType, $languageKey, $page, $count);
+        $list = $this->productsService->list($merchantId, $type, $categoryIds, $discountType, $languageKey, $page, $count);
 
         if (!$list->count()) {
             return ApiResponse::returnRes([]);
