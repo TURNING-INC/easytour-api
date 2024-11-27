@@ -107,7 +107,7 @@ class FeedsService extends BaseController
         if (!$data) {
             $this->feedContent->insert($content);
         } else {
-            $content->save($content);
+            $data->save($content);
         }
 
         return true;
