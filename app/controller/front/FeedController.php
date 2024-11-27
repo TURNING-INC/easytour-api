@@ -73,7 +73,7 @@ class FeedController extends BaseController
         $feed['banner'] = json_decode($feed['banner']) ?? [];
         
         $content = $this->feedsService->getContent($feedId, "{$languageKey}_content as content");
-        $feed['content'] = $content ?? '';
+        $feed['content'] = $content['content'] ?? '';
 
         $author = $this->usersService->getById($feed['uid'], 'username');
         unset($feed['uid']);
