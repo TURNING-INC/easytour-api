@@ -41,7 +41,10 @@ class ProductsService extends BaseController
 
     public function list($merchantId, $type, $categoryIds, $discountType, $languageKey, $page, $count) {
         $languageName = "{$languageKey}_name";
-        $field = "spu.`id` as spu_id, spu.cover, spu.`{$languageName}` as name, spu.type, spu.discount_type, spu.discount_start, spu.discount_end";
+        $field = "spu.`id` as spu_id, spu.cover, 
+                    spu.`{$languageName}` as name, spu.type, 
+                    spu.discount_type, spu.discount_start, spu.discount_end,
+                    LEFT(pd.`{$languageKey}_detail`, 100) as detail";
 
         $now = date('Y-m-d H:i:s');
         $where[] = "spu.merchant_id = {$merchantId}";
@@ -66,6 +69,7 @@ class ProductsService extends BaseController
         return $this->spu::alias('spu')
             ->field($field)
             ->leftJoin("category_spu cp", 'cp.spu_id=spu.id')
+            ->leftJoin("spu_detail pd", 'pd.spu_id=spu.id')
             ->where($where)
             ->order('spu.weight desc, spu.id desc')
             ->group('spu.id')
