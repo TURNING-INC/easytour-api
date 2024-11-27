@@ -30,7 +30,9 @@ class MerchantController extends BaseController
         $merchantId = $request->admin->merchant_id;
         $merchant = $this->merchantsService->getById($merchantId);
         $merchant['banner'] = json_decode($merchant['banner']) ?? [];
-        $merchant['business_hours'] = json_decode($merchant['business_hours']) ?? [];
+        $merchant['zh_cn_business_hours'] = json_decode($merchant['zh_cn_business_hours']) ?? [];
+        $merchant['zh_hk_business_hours'] = json_decode($merchant['zh_hk_business_hours']) ?? [];
+        $merchant['en_business_hours'] = json_decode($merchant['en_business_hours']) ?? [];
 
         unset($merchant['id']);
         unset($merchant['encode_id']);
@@ -48,7 +50,9 @@ class MerchantController extends BaseController
         $zhCnIntro = $this->request->param('zh_cn_intro', '');
         $zhHkIntro = $this->request->param('zh_hk_intro', '');
         $enIntro = $this->request->param('en_intro', '');
-        $businessHours = $this->request->param('business_hours');
+        $zhCnBusinessHours = $this->request->param('zh_cn_business_hours');
+        $zhHkBusinessHours = $this->request->param('zh_hk_business_hours');
+        $enBusinessHours = $this->request->param('en_business_hours');
         $lat = $this->request->param('lat', '');
         $lng = $this->request->param('lng', '');
         $zhCnAddress = $this->request->param('zh_cn_address', '');
@@ -80,7 +84,9 @@ class MerchantController extends BaseController
             'zh_cn_intro' => $zhCnIntro,
             'zh_hk_intro' => $zhHkIntro,
             'en_intro' => $enIntro,
-            'business_hours' => $businessHours,
+            'zh_cn_business_hours' => $zhCnBusinessHours,
+            'zh_hk_business_hours' => $zhHkBusinessHours,
+            'en_business_hours' => $enBusinessHours,
             'lat' => $lat,
             'lng' => $lng,
             'zh_cn_address' => $zhCnAddress,
