@@ -107,7 +107,8 @@ class ProductsService extends BaseController
 
         $soldNum = $this->ordersService->salesVolume($spuId);
         $total = $soldNum + $leftInventory;
-        $result['sold_percent'] = floor(($soldNum / $total) * 100);
+        $result['sold_percent'] = $leftInventory ? floor(($soldNum / $total) * 100) : 100;
+        $result['sold_percent'] = min($result['sold_percent'], 100);
 
         $result['multiple_prices'] = $multiplePrices;
 
