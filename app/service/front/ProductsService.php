@@ -86,8 +86,7 @@ class ProductsService extends BaseController
         $skuList = $skuList->toArray();
         $result = ['price' => NULL, 'origin_price' => NULL, 'par_value' => NULL];
         $multiplePrices = false;
-        $totalInventory = NUll;
-        $leftInventory = NULL;
+        $leftInventory = 0;
 
         //比对最低价格
         foreach ($skuList as $item) {
@@ -102,7 +101,13 @@ class ProductsService extends BaseController
                 $result['origin_price'] = $item['origin_price'];
                 $result['par_value'] = $item['par_value'];
             }
+
+            $leftInventory += $item['inventory'];
         }
+
+        $soldNum = $this->ordersService->salesVolume($spuId);
+        $total = $soldNum + $leftInventory;
+        $result['sold_percent'] = floor(($soldNum / $total) * 100);
 
         $result['multiple_prices'] = $multiplePrices;
 
@@ -142,7 +147,7 @@ class ProductsService extends BaseController
         $spu = array_merge($spu, $spuDetail);
 
         $skuList = $this->sku
-            ->field("id as sku_id, `{$languageName}` as name, origin_price, discount_price, par_value")
+            ->field("id as sku_id, `{$languageName}` as name, origin_price, discount_price, par_value, inventory")
             ->where([['spu_id', '=', $spuId], ['del_flag', '=', Sku::NORMAL]])
             ->select();
 
