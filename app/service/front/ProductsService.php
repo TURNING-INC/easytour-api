@@ -122,9 +122,9 @@ class ProductsService extends BaseController
     public function detail($spuId, $languageKey='zh_cn') {
         $languageName = "{$languageKey}_name";
         $languageDetail = "{$languageKey}_detail";
-        $languageNotice = "{$languageKey}_notice";
-        $languagePriceSchedule = "{$languageKey}_price_schedule";
-        $languageLimit = "{$languageKey}_limit";
+        $languageRemark = "{$languageKey}_remark";
+        $languageUsageTime = "{$languageKey}_usage_time";
+        $languageUnavailableDates = "{$languageKey}_unavailable_dates";
 
         $spu = $this->spu->field("id as spu_id, cover, `{$languageName}` as name, can_mc,
                                         type, discount_type, discount_start, discount_end, del_flag")
@@ -139,7 +139,7 @@ class ProductsService extends BaseController
         $spu['6m_sales_volume'] = $this->ordersService->salesVolume($spuId, $startTime);
 
         $spuDetail = $this->spuDetail
-            ->field("`{$languageDetail}` as detail, `{$languageNotice}` as notice, `{$languagePriceSchedule}` as price_schedule, `{$languageLimit}` as `limit`")
+            ->field("`{$languageDetail}` as detail, `{$languageRemark}` as remark, `{$languageUsageTime}` as usage_time, `{$languageUnavailableDates}` as `unavailable_dates`")
             ->where([['spu_id', '=', $spuId]])
             ->find();
 

@@ -259,4 +259,19 @@ class OrdersService extends BaseController
 
         return false;
     }
+
+    public function updateValidPeriod($spuId, $from, $end) {
+        $orderItems = $this->orderItems->where(['spu_id' => $spuId])->select();
+        $orderItems = $orderItems->toArray();
+
+        if (!$orderItems) {
+            return true;
+        }
+
+        $orderIds = array_unique(array_column($orderItems, 'order_id'));
+        return $this->orders
+                ->where([['id', 'in', $orderIds], ['pay_status', '=', Orders::PAY_STATUS_PAID]])
+                ->save(['valid_from' => $from, 'valid_end' => $end]);
+
+    }
 }

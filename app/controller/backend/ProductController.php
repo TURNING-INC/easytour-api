@@ -143,17 +143,17 @@ class ProductController extends BaseController
         $zhHkDetail = $this->request->param('zh_hk_detail', '');
         $enDetail = $this->request->param('en_detail', '');
 
-        $zhCnNotice = $this->request->param('zh_cn_notice', '');
-        $zhHkNotice = $this->request->param('zh_hk_notice', '');
-        $enNotice = $this->request->param('en_notice', '');
+        $zhCnRemark = $this->request->param('zh_cn_remark', '');
+        $zhHkRemark = $this->request->param('zh_hk_remark', '');
+        $enRemark = $this->request->param('en_remark', '');
 
-        $zhCnPriceSchedule = $this->request->param('zh_cn_price_schedule', '');
-        $zhHkPriceSchedule = $this->request->param('zh_hk_price_schedule', '');
-        $enPriceSchedule = $this->request->param('en_price_schedule', '');
+        $zhCnUsageTime = $this->request->param('zh_cn_usage_time', '');
+        $zhHkUsageTime = $this->request->param('zh_hk_usage_time', '');
+        $enUsageTime = $this->request->param('en_usage_time', '');
 
-        $zhCnLimit = $this->request->param('zh_cn_limit', '');
-        $zhHkLimit = $this->request->param('zh_hk_limit', '');
-        $enLimit = $this->request->param('en_limit', '');
+        $zhCnUnavailableDates = $this->request->param('zh_cn_unavailable_dates', '');
+        $zhHkUnavailableDates = $this->request->param('zh_hk_unavailable_dates', '');
+        $enUnavailableDates = $this->request->param('en_unavailable_dates', '');
 
 //        $zhCnDetail = array_filter(json_decode($zhCnDetail, true) ?? []);
 //        $zhHkDetail = array_filter(json_decode($zhHkDetail, true) ?? []);
@@ -168,15 +168,15 @@ class ProductController extends BaseController
             'zh_cn_detail' => $zhCnDetail,
             'zh_hk_detail' => $zhHkDetail,
             'en_detail' => $enDetail,
-            'zh_cn_notice' => $zhCnNotice,
-            'zh_hk_notice' => $zhHkNotice,
-            'en_notice' => $enNotice,
-            'zh_cn_price_schedule' => $zhCnPriceSchedule,
-            'zh_hk_price_schedule' => $zhHkPriceSchedule,
-            'en_price_schedule' => $enPriceSchedule,
-            'zh_cn_limit' => $zhCnLimit,
-            'zh_hk_limit' => $zhHkLimit,
-            'en_limit' => $enLimit,
+            'zh_cn_remark' => $zhCnRemark,
+            'zh_hk_remark' => $zhHkRemark,
+            'en_remark' => $enRemark,
+            'zh_cn_usage_time' => $zhCnUsageTime,
+            'zh_hk_usage_time' => $zhHkUsageTime,
+            'en_usage_time' => $enUsageTime,
+            'zh_cn_unavailable_dates' => $zhCnUnavailableDates,
+            'zh_hk_unavailable_dates' => $zhHkUnavailableDates,
+            'en_unavailable_dates' => $enUnavailableDates,
         ];
 
         $this->productsService->saveSpuDetail($spuId, $data);

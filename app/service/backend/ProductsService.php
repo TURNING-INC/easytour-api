@@ -74,9 +74,9 @@ class ProductsService extends BaseController
     public function detail($spuId) {
         $name = '`zh_cn_name`,`zh_hk_name`,`en_name`';
         $detail = '`zh_cn_detail`,`zh_hk_detail`,`en_detail`';
-        $notice = '`zh_cn_notice`,`zh_hk_notice`,`en_notice`';
-        $priceSchedule = '`zh_cn_price_schedule`,`zh_hk_price_schedule`,`en_price_schedule`';
-        $limit = '`zh_cn_limit`,`zh_hk_limit`,`en_limit`';
+        $remark = '`zh_cn_remark`,`zh_hk_remark`,`en_remark`';
+        $usageTime = '`zh_cn_usage_time`,`zh_hk_usage_time`,`en_usage_time`';
+        $unavailableDates = '`zh_cn_unavailable_dates`,`zh_hk_unavailable_dates`,`en_unavailable_dates`';
 
         $spu = $this->spu->field("merchant_id, id as spu_id, cover, {$name}, can_mc, weight,
                                        valid_days, valid_period,
@@ -96,7 +96,7 @@ class ProductsService extends BaseController
         $spu['category_ids'] = $categories ? array_column($categories, 'category_id') : [];
 
         $spuDetail = $this->spuDetail
-            ->field("{$detail}, {$notice}, {$priceSchedule}, {$limit}")
+            ->field("{$detail}, {$remark}, {$usageTime}, {$unavailableDates}")
             ->where([['spu_id', '=', $spuId]])
             ->find();
 
@@ -131,7 +131,15 @@ class ProductsService extends BaseController
         if (!$spuId) {
             return $this->spu->insertGetId($data);
         } else {
-            return $this->spu->where(['id' => $spuId])->save($data);
+            $spu = $this->spu->where(['id' => $spuId])->find();
+            $updateOrder = $data['valid_period'] && $data['valid_period'] != $spu['valid_period'];
+            if ($spu->save($data) && $updateOrder) {
+                $period = json_decode($data['valid_period'], true);
+                $from = $period[0];
+                $end = $period[1];
+                $this->ordersService->updateValidPeriod($spuId, $from, $end);
+            }
+            return true;
         }
     }
 
