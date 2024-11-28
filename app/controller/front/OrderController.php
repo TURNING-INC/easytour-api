@@ -56,7 +56,20 @@ class OrderController extends BaseController
         return ApiResponse::returnRes($res);
     }
 
-    public function list(Request $request) {
+    public function cancel(Request $request) {
+        $uid = $request->user->id;
+        $orderId = $this->request->param('order_id', 0);
+
+        $order = $this->ordersService->getById($orderId);
+
+        if (!$order || $order->uid != $uid) {
+            HttpEx('', 50014);
+        }
+
+        $this->ordersService->cancel($order['order_no']);
+    }
+
+    public function list(Request $request) { //todo 超过支付时间的做处理
         $uid = $request->user->id;
         $languageKey = $request->languageKey;
         $page = $this->request->param('page', 0);
@@ -75,7 +88,7 @@ class OrderController extends BaseController
         return ApiResponse::returnRes($orderList);
     }
 
-    public function detail(Request $request) {
+    public function detail(Request $request) { //todo 超过支付时间的做处理
         $languageKey = $request->languageKey;
         $uid = $request->user->id;
         $orderId = $this->request->param('order_id', 0);

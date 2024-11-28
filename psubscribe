@@ -1,0 +1,111 @@
+/Users/brilliantcly/Documents/work/easytour-api/app/command/psubscribe.php：52
+read error on connection to 127.0.0.1:6379
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+
+
+/Users/brilliantcly/Documents/work/easytour-api/app/command/psubscribe.php：52
+read error on connection to 127.0.0.1:6379
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+回收订单0241128033626012
+回收订单0241128033814012
+回收订单0241128034004012
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+回收订单0241128034035012
+/Users/brilliantcly/Documents/work/easytour-api/app/command/psubscribe.php：38
+Trying to get property 'pay_status' of non-object
+
+
+
+
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+
+
+
+回收订单0241128034357012
+{"id":28,"order_no":"0241128034357012","merchant_id":1,"uid":1,"pay_amount":710,"order_from":"wx","transaction_id":null,"status":0,"pay_status":0,"paid_time":null,"use_status":0,"used_time":null,"writeoff_by":null,"refund_by":null,"refund_no":null,"valid_from":null,"valid_end":null,"created_at":"2024-11-28 03:43:57","updated_at":"2024-11-28 03:43:57"}
+0
+/Users/brilliantcly/Documents/work/easytour-api/vendor/topthink/think-orm/src/db/PDOConnection.php：797
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'order_id' in 'where clause'
+
+
+
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+回收订单0241128034807012
+4
+5
+save
+回收订单0241128035142012
+4
+5
+save
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+回收订单0241128035219012
+sku(4)恢复库存数：1
+sku(5)恢复库存数：2
+订单0241128035219012 status置为2
+PHP Warning:  PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+PHP Warning:  Module 'apcu' already loaded in Unknown on line 0
+
+Warning: PHP Startup: Unable to load dynamic library 'apc.so' (tried: /opt/homebrew/lib/php/pecl/20180731/apc.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so, 0x0009): symbol not found in flat namespace '_apc_is_enabled'), /opt/homebrew/lib/php/pecl/20180731/apc.so.so (dlopen(/opt/homebrew/lib/php/pecl/20180731/apc.so.so, 0x0009): tried: '/opt/homebrew/lib/php/pecl/20180731/apc.so.so' (no such file), '/usr/local/lib/apc.so.so' (no such file), '/usr/lib/apc.so.so' (no such file))) in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+
+Warning: Module 'apcu' already loaded in Unknown on line 0
+回收订单
+回收订单key:0241128041404012
+处理细节：取消未支付订单0241128041404012...；sku(4)恢复库存数：1；sku(5)恢复库存数：2；订单0241128041404012 status置为2

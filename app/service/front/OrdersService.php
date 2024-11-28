@@ -41,18 +41,22 @@ class OrdersService extends BaseController
     }
 
     public function place($merchantId, $mp, $uid, $skuList, $languageKey='zh_cn') {
-        //检查还有没有库存
-        $skuIds = array_column($skuList, 'sku_id');
-        $qtyList = array_column($skuList, 'qty', 'sku_id');
-        $dbList = $this->sku->where([['id', 'in', $skuIds]])->select();
-
-        $itemList = [];
-        $skuSales = [];
-        $totalPrice = 0;
-        $payBody = [];
-
-        Db::startTrans();
+        //todo 判断开始了没
         try {
+            Db::startTrans();
+            //检查还有没有库存
+            $skuIds = array_column($skuList, 'sku_id');
+            $qtyList = array_column($skuList, 'qty', 'sku_id');
+            $dbList = $this->sku
+                        ->where([['id', 'in', $skuIds]])
+                        ->lock(true)
+                        ->select();
+
+            $itemList = [];
+            $skuSales = [];
+            $totalPrice = 0;
+            $payBody = [];
+
             foreach ($dbList as $dbItem) {
                 $skuId = $dbItem->id;
                 $qty = $qtyList[$skuId];
@@ -62,9 +66,13 @@ class OrdersService extends BaseController
                 if ($dbItem->inventory == 0) {
                     $dbList->count() > 1 ? HttpEx('部分商品已售罄') : HttpEx('商品已售罄');
                 }
+
                 if ($dbItem->inventory < $qty) {
                     $dbList->count() > 1 ? HttpEx('部分商品库存不足') : HttpEx('商品库存不足');
                 }
+                $dbItem->inventory = $dbItem->inventory - $qty;
+                $dbItem->save();
+
                 $perPrice = $dbItem->discount_price ?? $dbItem->origin_price;
                 $itemTotalPrice = $perPrice * $qty;
 
@@ -94,7 +102,8 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
                     'merchant_id' => $merchantId,
                     'uid' => $uid,
                     'pay_amount' => $totalPrice,
-                    'order_from' => $mp
+                    'order_from' => $mp,
+                    'pay_deadline' => time() + Orders::COMPLETE_PAYMENT_WITHIN
                 ]);
                 $add = ['order_id' => $orderId];
 
@@ -103,6 +112,10 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
                 }, $add);
 
                 $this->orderItems->saveAll($itemList);
+
+                $redis = Tools::redis();
+
+                $redis->setex($orderNo,Orders::COMPLETE_PAYMENT_WITHIN, $orderNo);
             } else {
                 HttpEx($res['err_code_des']);
             }
@@ -112,7 +125,7 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
             Db::rollback();
             // 处理错误，例如记录日志或者返回错误信息
 
-            HttpEx($e->getMessage());
+            HttpEx('库存不足');
         }
 
         return $res;
@@ -123,7 +136,7 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
 
         $where = implode(' AND ', $where);
         return $this->orders
-            ->field('id, pay_amount, status, pay_status, use_status, valid_from, valid_end')
+            ->field('id, pay_amount, status, pay_status, use_status, valid_from, valid_end, pay_deadline')
             ->where($where)
             ->order('id desc')
             ->paginate($count,false, ['page'=>$page]);
@@ -133,9 +146,13 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
         return $this->orders->where(['order_no' => $orderNo])->find();
     }
 
+    public function getById($orderId) {
+        return $this->orders->where(['id' => $orderId])->find();
+    }
+
     public function detail($uid, $orderId, $languageKey) {
         $detail = $this->orders
-                    ->field('pay_amount, order_no, status, pay_status, use_status, valid_from, valid_end')
+                    ->field('pay_amount, order_no, status, pay_status, use_status, valid_from, valid_end, pay_deadline')
                     ->where([['uid', '=', $uid], ['id', '=', $orderId]])->find();
         if (!$detail) {
             HttpEx('订单不存在');
@@ -288,6 +305,50 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
         }
 
         return ['validFrom' => $validFrom, 'validEnd' => $validEnd];
+    }
+
+    public function cancel($orderNo, $returnDetail=false) {
+        $order = $this->orders->where(['order_no' => $orderNo])->find();
+        $detail = [];
+
+        if ($order && $order->pay_status == Orders::PAY_STATUS_UNPAID && $order->status == Orders::STATUS_NORMAL) {
+            $detail[] = "取消未支付订单{$orderNo}...";
+            try {
+                Db::startTrans();
+
+                $orderItems = $this->orderItems->where(['order_id' => $order['id']])->select();
+
+                foreach ($orderItems as $item) {
+                    $skuId = $item['sku_id'];
+                    $qty = $item['qty'];
+                    $sku = $this->sku
+                        ->where(['id' => $skuId])
+                        ->lock(true)
+                        ->find();
+                    $sku->inventory = $sku->inventory + $qty;
+                    $sku->save();
+
+                    $detail[] = "sku({$skuId})恢复库存数：{$qty}";
+                }
+
+                $order->status = Orders::STATUS_EXPIRED;
+                $order->save();
+
+                $detail[] = "订单{$orderNo} status置为" . Orders::STATUS_EXPIRED;
+                Db::commit();
+
+                if ($returnDetail) {
+                    return $detail;
+                } else {
+                    return true;
+                }
+
+            } catch (\Exception $e) {
+                Db::rollback();
+
+                HttpEx($e->getMessage());
+            }
+        }
     }
 
 }

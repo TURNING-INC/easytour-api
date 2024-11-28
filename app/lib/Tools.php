@@ -155,4 +155,21 @@ class Tools
         return $result->getDataUri();
     }
 
+    /**
+     * redis
+     * @return \Redis
+     * @throws \RedisException
+     */
+    public static function redis(): \Redis
+    {
+        $redis = new \Redis();
+        $redis->connect(
+            env('redis.host', '127.0.0.1'),
+            env('redis.port', '6379')
+        );
+        $redis->auth(env('redis.password', ''));
+
+        return $redis;
+    }
+
 }
