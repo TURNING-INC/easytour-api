@@ -36,6 +36,7 @@ class FeedsService extends BaseController
 
     public function list($merchantId, $type, $languageKey='zh_cn', $page=1, $count=5) {
         $where[] = "f.merchant_id = {$merchantId}";
+        $where[] = "f.del_flag = " . Feeds::DELETED;
 
         if ($type !== NULL) {
             $where[] = "f.type = {$type}";
