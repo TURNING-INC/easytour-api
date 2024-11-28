@@ -201,13 +201,15 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
 
     public function salesVolume($spuId, $start='', $end='') {
         $where[] = "oi.spu_id = {$spuId}";
+        $where[] = "o.status = " . Orders::STATUS_NORMAL;
+        $where[] = "o.pay_status IN (" . implode(',', [Orders::PAY_STATUS_UNPAID, Orders::PAY_STATUS_PAID]) . ")";
 
         if ($start) {
-            $where[] = "o.paid_time >= '{$start}'";
+            $where[] = "o.created_at >= '{$start}'";
         }
 
         if ($end) {
-            $where[] = "o.paid_time < '{$end}'";
+            $where[] = "o.created_at < '{$end}'";
         }
 
         $where = implode(" AND ", $where);
