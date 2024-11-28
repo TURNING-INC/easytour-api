@@ -44,7 +44,7 @@ class ProductsService extends BaseController
         $field = "spu.`id` as spu_id, spu.cover, 
                     spu.`{$languageName}` as name, spu.type, 
                     spu.discount_type, spu.discount_start, spu.discount_end,
-                    pd.`{$languageKey}_detail` as detail";
+                    LEFT(pd.`{$languageKey}_detail`, 110) as detail";
 
         $now = date('Y-m-d H:i:s');
         $where[] = "spu.merchant_id = {$merchantId}";
