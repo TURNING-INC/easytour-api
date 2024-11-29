@@ -137,6 +137,7 @@ Route::group('backend', function () {
             Route::get('detail', 'backend.FeedController/detail');
             Route::post('save', 'backend.FeedController/save');
             Route::get('replyList', 'backend.FeedController/replyList');
+            Route::post('del', 'backend.FeedController/del');
         });
 
     })->middleware(app\middleware\ManageAdminLogin::class);

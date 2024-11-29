@@ -5,6 +5,7 @@ namespace app\controller\backend;
 use app\BaseController;
 use app\lib\ApiResponse;
 use app\lib\Tools;
+use app\model\Feeds;
 use app\model\Users;
 use app\service\backend\FeedsService;
 use app\service\front\UsersService;
@@ -131,6 +132,22 @@ class FeedController extends BaseController
             'zh_hk_content' => $zhHkContent, //json_encode($zhHkContent, JSON_UNESCAPED_UNICODE),
             'en_content' => $enContent, //json_encode($enContent),
         ]);
+
+        return ApiResponse::returnRes(true);
+    }
+
+    public function del(Request $request)
+    {
+        $merchantId = $request->admin->merchant_id;
+        $feedId = $this->request->param('feed_id', 0);
+
+        $feed = $this->feedsService->getById($feedId);
+
+        if ($feed && $feed['merchant_id'] != $merchantId) {
+            HttpEx('数据错误');
+        }
+
+        $feed->save(['del_flag' => Feeds::DELETED]);
 
         return ApiResponse::returnRes(true);
     }
