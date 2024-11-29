@@ -19,5 +19,5 @@ class Orders extends Model
     const USE_STATUS_UNUSED = 0; //未使用
     const USE_STATUS_USED = 1;  //已使用
 
-    const COMPLETE_PAYMENT_WITHIN = 10;//60 * 5; //订单须在 5分钟 内支付，否则失效
+    const COMPLETE_PAYMENT_WITHIN = 60 * 5; //订单须在 5分钟 内支付，否则失效
 }

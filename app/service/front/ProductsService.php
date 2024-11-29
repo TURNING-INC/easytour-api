@@ -127,13 +127,15 @@ class ProductsService extends BaseController
         $languageUnavailableDates = "{$languageKey}_unavailable_dates";
 
         $spu = $this->spu->field("id as spu_id, cover, `{$languageName}` as name, can_mc,
-                                        type, discount_type, discount_start, discount_end, del_flag")
+                                        type, discount_type, discount_start, discount_end, 
+                                        valid_days, valid_period, del_flag")
             ->find($spuId);
 
         if (!$spu) {
             return [];
         }
         $spu = $spu->toArray();
+        $spu['valid_period'] = json_decode($spu['valid_period']) ?? [];
         //过去6个月销量
         $startTime = date("Y-m-d H:i:s",strtotime("-6 month"));
         $spu['6m_sales_volume'] = $this->ordersService->salesVolume($spuId, $startTime);
