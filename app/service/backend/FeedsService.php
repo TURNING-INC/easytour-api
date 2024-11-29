@@ -47,7 +47,7 @@ class FeedsService extends BaseController
         }
 
         if ($delFlag !== NULL) {
-            $where[] = "spu.del_flag = {$delFlag}";
+            $where[] = "f.del_flag = {$delFlag}";
         }
 
         $where = implode(' AND ', $where);
