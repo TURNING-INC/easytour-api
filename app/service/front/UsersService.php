@@ -113,7 +113,11 @@ class UsersService extends BaseController
 
         //更新用户
         if ($userUpdData) {
-            $this->users->where(['id' => $uid])->save($userUpdData);
+            $user = $this->users->where(['id' => $uid])->find();
+            if (isset($userUpdData['phone']) && !$user['username']) {
+                $userUpdData['username'] = '用户' . substr($userUpdData['phone'], -4);
+            }
+            $user->save($userUpdData);
             $res = true;
         }
 
