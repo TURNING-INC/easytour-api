@@ -36,7 +36,7 @@ class UserLogin
                 throw new \Exception('Expired token');
             }
 
-            if (in_array($request->pathinfo(), [
+            if (!in_array($request->pathinfo(), [
                 'u/info'
             ]) && !$user['phone']) {
                 HttpEx('', 50008);
