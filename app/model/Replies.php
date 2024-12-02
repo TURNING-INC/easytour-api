@@ -15,7 +15,7 @@ class Replies extends Model
     public function list($feedId, $threadId, $uid, $page=1, $count=10) {
         $targetType = Likes::TYPE_REPLY;
         return Replies::alias('reply')
-            ->field("reply.id, reply.content, reply.like_count, reply.reply_count, reply.created_at,
+            ->field("reply.id, reply.content, reply.like_count, reply.reply_count, reply.created_at, reply.level,
                       replier.username, replier.avatar_url, replyTo.username as to_username,
                       IF(like.uid IS NULL,0,1) AS is_like,
                       IF(reply.uid = {$uid}, 1, 0) AS can_delete ")
