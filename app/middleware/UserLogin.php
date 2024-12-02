@@ -36,6 +36,10 @@ class UserLogin
                 throw new \Exception('Expired token');
             }
 
+            if (!$user['phone']) {
+                HttpEx('', 50008);
+            }
+
             if (!$user) {
                 throw new \Exception('Expired token');
             } else if ($user['del_flag']) {  //被清除
