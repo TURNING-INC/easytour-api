@@ -37,7 +37,7 @@ class UserLogin
             }
 
             if (!in_array($request->pathinfo(), [
-                'u/info'
+                'u/info', 'u/upd',
             ]) && !$user['phone']) {
                 HttpEx('', 50008);
             }
