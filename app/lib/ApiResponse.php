@@ -19,7 +19,10 @@ class ApiResponse
         50014 => ['zh-cn'=>'数据不存在', 'zh-hk'=>'數據不存在', 'en'=>'Data does not exist'],
         50015 => ['zh-cn'=>'缺少凭证code', 'zh-hk'=>'缺少憑證code', 'en'=>'Certificate code missing'],
         50016 => ['zh-cn'=>'没有权限', 'zh-hk'=>'沒有權限', 'en'=>'Have no authority'],
-        50017 => ['zh-cn'=>'数据不可为空', 'zh-hk'=>'數據不可為空', 'en'=>'Data cannot be empty']
+        50017 => ['zh-cn'=>'数据不可为空', 'zh-hk'=>'數據不可為空', 'en'=>'Data cannot be empty'],
+        50018 => ['zh-cn'=>'部分商品库存不足', 'zh-hk'=>'部分商品庫存不足', 'en'=>'Stocks of some goods are low'],
+        50019 => ['zh-cn'=>'商品库存不足', 'zh-hk'=>'商品庫存不足', 'en'=>'Commodity shortage'],
+        50020 => ['zh-cn'=>'当前时间还不能下单该商品', 'zh-hk'=>'當前時間還不能下單該商品', 'en'=>'This product cannot be placed at this time'],
     ];
 
     private static $successMsg = ['zh-cn'=>'操作成功', 'zh-hk'=>'操作成功', 'en'=>'Success'];

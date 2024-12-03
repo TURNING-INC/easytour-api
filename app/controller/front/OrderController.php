@@ -115,7 +115,7 @@ class OrderController extends BaseController
         }
 
         if (!$this->ordersService->canUse($order)) {
-            HttpEx('请检查订单状态、可使用时间段');
+            HttpEx('订单无法核销。请检查订单状态、可使用时间段');
         }
 
         $staff = $this->usersService->getById($staffUid);
@@ -241,7 +241,7 @@ class OrderController extends BaseController
 
                 $order->save([
                     'pay_status' => Orders::PAY_STATUS_REFUNDED,
-                    'status' => Orders::STATUS_CANCELLED
+                    'status' => Orders::STATUS_UNAVAILABLE
                 ]);
             }
         }

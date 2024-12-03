@@ -7,9 +7,9 @@ use think\Model;
 class Orders extends Model
 {
     const STATUS_NORMAL = 0; //正常
-    const STATUS_CANCELLED = 1; //已取消（用户自己取消）
-    const STATUS_EXPIRED = 2; //已过期（错过有效期）
-    const STATUS_EXPIRED_UNAVAILABLE = 3; //不可用（退款导致的不可用）
+    const STATUS_CANCELLED = 1; //已取消（用户自己取消 / 未及时支付）
+    const STATUS_EXPIRED = 2; //已过期（错过可使用范围）
+    const STATUS_UNAVAILABLE = 3; //不可用（退款导致的不可用）
 
     const PAY_STATUS_UNPAID = 0; //未付款
     const PAY_STATUS_PAID = 1; //已付款

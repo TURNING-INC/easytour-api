@@ -83,6 +83,7 @@ Route::group('', function () {
         //order
         Route::group('o', function () {
             Route::post('place', 'front.OrderController/place');
+            Route::post('cancel', 'front.OrderController/cancel');
             Route::get('list', 'front.OrderController/list');
             Route::get('detail', 'front.OrderController/detail');
             Route::post('writeOff', 'front.OrderController/writeOff');
@@ -117,7 +118,6 @@ Route::group('backend', function () {
             Route::get('list', 'backend.OrderController/list');
             Route::get('detail', 'backend.OrderController/detail');
             Route::post('writeOff', 'backend.OrderController/writeOff');
-            Route::post('changeStatus', 'backend.OrderController/changeStatus');
             Route::post('refund', 'backend.OrderController/refund');
         });
 

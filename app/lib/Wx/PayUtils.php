@@ -13,8 +13,8 @@ class PayUtils
     private $appId = '';
     private $openid = '';
 
-    private $payNotifyUrl = 'http://etapi.carben.me/o/payCallback';
-    private $refundNotifyUrl = 'http://etapi.carben.me/o/refundCallback';
+    private $payNotifyUrl = 'http://etapi.c-m.group/o/payCallback';
+    private $refundNotifyUrl = 'http://etapi.c-m.group/o/refundCallback';
 
     public function __construct()
     {
@@ -26,10 +26,13 @@ class PayUtils
         }
 
         $this->appId = $merchant->wx_app_id;
-        $this->mchId = $merchant->merchant->wx_mch_id;
+        $this->mchId = $merchant->wx_mch_id;
         $this->key = $merchant->wx_mch_key;
 
-        $this->openid = $merchant->user->wx_openid ?? '';
+        $this->openid = app(Request::class)->user->wx_openid ?? '';
+        if (!$this->openid) {
+            HttpEx('openid缺失');
+        }
     }
 
     public function pay($totalFee, $body, $ourTradeNo, $tradeType = 'JSAPI') {

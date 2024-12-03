@@ -160,25 +160,6 @@ class OrdersService extends BaseController
         return ['items' => array_values($list)];
     }
 
-    public function changeStatus($id, $adminId, $status, $payStatus) {
-        $data = [];
-
-        if ($status !== NULL) {
-            $data['status'] = $status;
-        }
-
-        if ($payStatus !== NULL) {
-            $data['pay_status'] = $payStatus;
-        }
-
-        if ($data && $this->orders->where(['id' => $id])->save($data)) {
-            $this->operateLog->log($adminId, OperateLog::FROM_BACKEND, 'changeStatus', $id,
-                OperateLog::TARGET_TYPE_ORDER, $data);
-        }
-
-        return true;
-    }
-
     public function writeOff($id, $adminId) {
         $data = [
             'use_status' => Orders::USE_STATUS_USED,
@@ -208,14 +189,15 @@ class OrdersService extends BaseController
             }
 
             $data = [
-                'status' => Orders::STATUS_CANCELLED,
+                'status' => Orders::STATUS_UNAVAILABLE,
                 'pay_status' => Orders::PAY_STATUS_REFUNDING,
                 'refund_no' => $refundNo
             ];
-            $order->save($data);
-
-            $this->operateLog->log($adminId, OperateLog::FROM_BACKEND,'refund', $orderId,
-                        OperateLog::TARGET_TYPE_ORDER, json_encode($data));
+            if ($order->save($data)) {
+                //todo 退款库存需要归还吗？
+                $this->operateLog->log($adminId, OperateLog::FROM_BACKEND,'refund', $orderId,
+                    OperateLog::TARGET_TYPE_ORDER, json_encode($data));
+            }
 
         } else {	//FAIL 提交业务失败
             HttpEx("退款申请提交失败：{$refundApply['return_msg']}");

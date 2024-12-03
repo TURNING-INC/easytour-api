@@ -97,37 +97,10 @@ class OrderController extends BaseController
         }
 
         if (!$this->ordersService->canUse($order)) {
-            HttpEx('订单无法核销，请检查订单状态、可使用时间段');
+            HttpEx('订单无法核销。请检查订单状态、可使用时间段');
         }
 
         $this->ordersService->writeOff($orderId, $adminId);
-
-        return ApiResponse::returnRes(true);
-    }
-
-    public function changeStatus(Request $request) {
-        $adminId = $request->admin->id;
-        $merchantId = $request->admin->merchant_id;
-        $orderId = $this->request->param('order_id', 0);
-        $status = $this->request->param('status', NULL);
-        $payStatus = $this->request->param('pay_status', NULL);
-
-        if (!$orderId) {
-            HttpEx('参数缺失');
-        }
-
-        $order = $this->ordersService->getById($orderId);
-
-        if (!$orderId || $order->merchant_id != $merchantId) {
-            HttpEx('订单不存在');
-        }
-
-        if (($status !== NULL || $payStatus !== NULL)
-            && $order->status == $status && $order->pay_status == $payStatus) {
-            HttpEx('请选择要改变的状态');
-        }
-
-        $this->ordersService->changeStatus($orderId, $adminId, $status, $payStatus);
 
         return ApiResponse::returnRes(true);
     }

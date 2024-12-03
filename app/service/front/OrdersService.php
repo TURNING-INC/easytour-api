@@ -41,7 +41,6 @@ class OrdersService extends BaseController
     }
 
     public function place($merchantId, $mp, $uid, $skuList, $languageKey='zh_cn') {
-        //todo 判断开始了没
         try {
             Db::startTrans();
             //检查还有没有库存
@@ -54,21 +53,29 @@ class OrdersService extends BaseController
 
             $itemList = [];
             $skuSales = [];
+            $checkedSpuIds = [];
             $totalPrice = 0;
             $payBody = [];
+            $now = time();
 
             foreach ($dbList as $dbItem) {
                 $skuId = $dbItem->id;
+                $spuId = $dbItem->spu_id;
                 $qty = $qtyList[$skuId];
                 $skuSales[$skuId] = $qty;
                 $payBody[] = "{$dbItem["{$languageKey}_name"]}×{$qty}";
 
-                if ($dbItem->inventory == 0) {
-                    $dbList->count() > 1 ? HttpEx('部分商品已售罄') : HttpEx('商品已售罄');
+                if (!in_array($spuId, $checkedSpuIds)) {
+                    $spu = $this->spu->find($spuId);
+
+                    if ($spu->discount_start && strtotime($spu->discount_start) > $now) HttpEx('', 50020);
+                    if ($spu->discount_end && strtotime($spu->discount_end) < $now) HttpEx('', 50020);
+
+                    $checkedSpuIds[] = $spuId;
                 }
 
                 if ($dbItem->inventory < $qty) {
-                    $dbList->count() > 1 ? HttpEx('部分商品库存不足') : HttpEx('商品库存不足');
+                    $dbList->count() > 1 ? HttpEx('', 50018) : HttpEx('', 50019);
                 }
                 $dbItem->inventory = $dbItem->inventory - $qty;
                 $dbItem->save();
@@ -77,7 +84,7 @@ class OrdersService extends BaseController
                 $itemTotalPrice = $perPrice * $qty;
 
                 $itemList[] = [
-                    'spu_id' => $dbItem['spu_id'],
+                    'spu_id' => $spuId,
                     'sku_id' => $skuId,
                     'qty' => $qty,
                     'per_price' => $perPrice,
@@ -92,9 +99,7 @@ class OrdersService extends BaseController
 
             $body = implode(',', $payBody);
 
-            //$res = $this->callPay($mp, $body, $totalPrice, $orderNo);
-            //todo 没有商户可以用，先模拟
-$res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCCESS'];
+            $res = $this->callPay($mp, $body, $totalPrice, $orderNo);
 
             if ($res['return_code'] == 'SUCCESS' && $res['return_msg'] == 'OK' && $res['result_code'] == 'SUCCESS') {
                 $orderId = $this->orders->insertGetId([
@@ -125,7 +130,7 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
             Db::rollback();
             // 处理错误，例如记录日志或者返回错误信息
 
-            HttpEx('库存不足');
+            HttpEx($e->getMessage());
         }
 
         return $res;
@@ -155,7 +160,7 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
                     ->field('pay_amount, order_no, status, pay_status, use_status, valid_from, valid_end, pay_deadline')
                     ->where([['uid', '=', $uid], ['id', '=', $orderId]])->find();
         if (!$detail) {
-            HttpEx('订单不存在');
+            HttpEx('', 50014);
         }
         $detail = $detail->toArray();
         if ($this->canUse($detail)){
@@ -311,6 +316,10 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
         $order = $this->orders->where(['order_no' => $orderNo])->find();
         $detail = [];
 
+        if ($order->status == Orders::STATUS_CANCELLED) {
+            return true;
+        }
+
         if ($order && $order->pay_status == Orders::PAY_STATUS_UNPAID && $order->status == Orders::STATUS_NORMAL) {
             $detail[] = "取消未支付订单{$orderNo}...";
             try {
@@ -331,10 +340,10 @@ $res = ['return_code' => 'SUCCESS', 'return_msg' => 'OK', 'result_code' => 'SUCC
                     $detail[] = "sku({$skuId})恢复库存数：{$qty}";
                 }
 
-                $order->status = Orders::STATUS_EXPIRED;
+                $order->status = Orders::STATUS_CANCELLED;
                 $order->save();
 
-                $detail[] = "订单{$orderNo} status置为" . Orders::STATUS_EXPIRED;
+                $detail[] = "订单{$orderNo} status置为" . Orders::STATUS_CANCELLED;
                 Db::commit();
 
                 if ($returnDetail) {

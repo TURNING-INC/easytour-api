@@ -92,7 +92,7 @@ class UserController extends BaseController
         $file = $_FILES['avatar'] ?? [];
 
         if (!$file || !is_uploaded_file($file['tmp_name'])) {
-            HttpEx('请上传头像');
+            HttpEx('', 50013);
         }
 
         $res = $fileService->uploadOss($file, 'user_avatar_dir');
